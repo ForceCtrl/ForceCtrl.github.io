@@ -160,6 +160,9 @@ h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; text-wrap
 /* media */
 .card { border-radius: var(--r-lg); background: var(--fill); overflow: hidden; }
 .card.white { background: #fff; }
+#video video.card { aspect-ratio: 16 / 9; object-fit: cover; background: #fff; }   /* the film is white: no fill may show at its edges */
+#video video.card:fullscreen { object-fit: contain; background: #fff; border-radius: 0; }   /* whole frame on a 16:10 screen, white letterbox */
+#video video.card:-webkit-full-screen { object-fit: contain; background: #fff; border-radius: 0; }
 .card.pad { padding: 24px; }
 .band .card.white { box-shadow: none; }
 img.card { background: #fff; }
