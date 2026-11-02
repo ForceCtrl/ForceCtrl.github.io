@@ -139,23 +139,7 @@ h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; text-wrap
   display: block; position: relative; color: var(--ink); background: #fff;
   border-radius: 0.16em; padding: 0.18em 0.32em 0.22em;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), inset 0 -0.03em 0 rgba(0,0,0,0.05);
-  animation: 5s linear infinite;
 }
-.hero .key:first-child .cap { animation-name: press-ctrl; }
-.hero .key:last-child .cap { animation-name: press-f; }
-@keyframes press-ctrl {
-  0%, 8%      { transform: none; animation-timing-function: ease-in; }
-  9.5%, 36%   { transform: translateY(0.06em); background: #f4f2ee; animation-timing-function: ease-out; }
-  38%         { transform: translateY(-0.008em); }
-  39.5%, 100% { transform: none; }
-}
-@keyframes press-f {
-  0%, 20%     { transform: none; animation-timing-function: ease-in; }
-  21.5%, 36%  { transform: translateY(0.06em); background: #f4f2ee; animation-timing-function: ease-out; }
-  38%         { transform: translateY(-0.008em); }
-  39.5%, 100% { transform: none; }
-}
-@media (prefers-reduced-motion: reduce) { .hero .cap { animation: none; } }
 
 /* media */
 .card { border-radius: var(--r-lg); background: var(--fill); overflow: hidden; }
@@ -265,18 +249,6 @@ pre {
 /* keycaps on the dark stage: pale caps on a grey body */
 .hero .key::before { background: #8a867e; box-shadow: 0 0.14em 0.5em rgba(0,0,0,0.5); }
 .hero .cap { background: #f4f2ee; box-shadow: none; }
-@keyframes press-ctrl {
-  0%, 8%      { transform: none; animation-timing-function: ease-in; }
-  9.5%, 36%   { transform: translateY(0.06em); background: #e4e0d8; animation-timing-function: ease-out; }
-  38%         { transform: translateY(-0.008em); }
-  39.5%, 100% { transform: none; }
-}
-@keyframes press-f {
-  0%, 20%     { transform: none; animation-timing-function: ease-in; }
-  21.5%, 36%  { transform: translateY(0.06em); background: #e4e0d8; animation-timing-function: ease-out; }
-  38%         { transform: translateY(-0.008em); }
-  39.5%, 100% { transform: none; }
-}
 @media (max-width: 734px) { .hero { min-height: max(560px, 100svh); } .hero-inner { padding: 76px 0 36px; } }
 
 /* ---- motion pass ---- */
@@ -352,3 +324,54 @@ pre {
   .hero-media, .hero-inner { transform: none; opacity: 1; }
   .step, .fig-stages .veil { transition: none; }
 }
+
+/* ---- find bar: the nav is the browser's find bar searching for "force". It is closed over the hero,
+   and the hero is held for a stretch of scroll in which Ctrl, then F, press down like real keys
+   (a little give, then a click); that opens the bar (find.js), which counts the sections as matches. ---- */
+/* the hold: the hero stays put while the keys press, then scrolls on and settles into its card */
+.hero-pin > .hero { position: sticky; top: 0; }
+.hero-hold { height: 60vh; }
+@media (prefers-reduced-motion: reduce) { .hero-hold { height: 0; } }
+
+/* the keys move only with the scroll. --d is the travel, 0 up to 1 fully down */
+.hero .cap { transform: translateY(calc(var(--d, 0) * 0.1em)); transition: transform .08s linear, background .08s; }
+.hero .cap.down { background: #dcd8d0; transition: transform .07s cubic-bezier(.5,0,.9,.4), background .07s; }
+.hero .cap.up { transition: transform .32s cubic-bezier(.34,1.7,.64,1), background .25s; }
+
+/* the bar: the live page's frosted glass, also over the hero, dropped in from the top edge */
+.nav, .nav.over {
+  background: rgba(255,255,255,0.68); box-shadow: 0 1px 0 var(--hair);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  transform: translateY(-100%); transition: transform .32s var(--ease);
+}
+.nav.open { transform: none; }
+.nav.over .nav-links a { color: var(--ink2); }
+.nav.over .nav-links a:hover, .nav.over .nav-links a.is-current { color: var(--ink); }
+.nav.over .key { background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 0.05em 0 0 #dcd8d0, 0 0.1em 0.3em rgba(0,0,0,0.08); }
+.nav-brand { margin-right: 4px; }
+
+.find {
+  display: flex; align-items: center; gap: 8px; height: 34px; margin-right: auto; padding: 0 4px 0 10px;
+  width: 260px; border: 1px solid var(--hair); border-radius: 8px; background: rgba(255,255,255,0.75); font-size: 13px;
+}
+.find-ico { width: 14px; height: 14px; flex: none; fill: none; stroke: var(--ink2); stroke-width: 1.6; stroke-linecap: round; }
+.find-q { flex: 1; color: var(--ink); white-space: nowrap; overflow: hidden; }
+.find-q.typing::after { content: ""; display: inline-block; width: 1px; height: 1.05em; margin-left: 1px; vertical-align: -0.15em; background: var(--ink); animation: caret 1s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+.find-n { color: var(--ink2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.find-n b { font-weight: 500; color: var(--ink); }
+.find-sep { width: 1px; height: 18px; background: var(--hair); }
+.find-btn {
+  display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 6px;
+  background: none; color: var(--ink2); cursor: pointer;
+}
+.find-btn:hover { background: var(--fill); color: var(--ink); }
+.find-btn:disabled { opacity: .35; cursor: default; background: none; }
+.find-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the section in view is the current match, marked like a pressed key in the keycap greys */
+.nav-links a.is-current::after { display: none; }
+.nav-links a.is-current { background: var(--fill); border-radius: 5px; box-shadow: 0 0 0 5px var(--fill); color: var(--ink); }
+
+@media (max-width: 734px) { .find { width: auto; flex: 1; } .nav-brand { margin-right: 0; } }
+@media (prefers-reduced-motion: reduce) { .nav { transition: none; } }

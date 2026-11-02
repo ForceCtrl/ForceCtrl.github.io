@@ -13,7 +13,9 @@
   --seg-on: #3a3b40;
 }
 
-.nav { background: rgba(11,11,13,0.72); box-shadow: 0 1px 0 var(--hair); }
+.nav, .nav.over { background: rgba(11,11,13,0.72); box-shadow: 0 1px 0 var(--hair); }
+.find { background: rgba(27,28,31,0.75); }
+.nav.over .key { background: #f2f0eb; box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0.05em 0 0 #8a867e; }
 .nav .key { color: #17181b; background: #f2f0eb; box-shadow: 0 0 0 1px rgba(255,255,255,0.10), 0 0.05em 0 0 #8a867e; }
 
 .pill.solid { color: #17181b; }

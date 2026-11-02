@@ -39,7 +39,8 @@
     const update = () => {
       queued = false;
       const h = hero.offsetHeight || window.innerHeight;
-      const p = Math.min(Math.max(window.scrollY / (0.6 * h), 0), 1);
+      const hold = hero.parentElement.querySelector(".hero-hold");   // the hero is held while the keys press (find.js)
+      const p = Math.min(Math.max((window.scrollY - (hold ? hold.offsetHeight : 0)) / (0.6 * h), 0), 1);
       hero.style.setProperty("--p", p.toFixed(4));
     };
     window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
