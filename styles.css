@@ -371,6 +371,7 @@ pre {
 
 /* the section in view is the current match, marked like a pressed key in the keycap greys */
 .nav-links a.is-current::after { display: none; }
+.nav-links { padding: 0 6px; margin: 0 -6px; }   /* room for the marked link's 5px fill at the ends: the scroller clips overflow */
 .nav-links a.is-current { background: var(--fill); border-radius: 5px; box-shadow: 0 0 0 5px var(--fill); color: var(--ink); }
 
 @media (max-width: 734px) { .find { width: auto; flex: 1; } .nav-brand { margin-right: 0; } }
